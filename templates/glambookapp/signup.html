@@ -1,0 +1,133 @@
+{% extends 'glambookapp/base.html' %}
+
+{% block title %}Create Account — GlamBook{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper" style="padding: 2.5rem 1rem;">
+    <div class="auth-box" style="max-width: 480px;">
+
+        <div class="auth-wordmark">GlamBook</div>
+        <p class="auth-sub">Create your account</p>
+
+        <form method="post" action="{% url 'signup' %}" novalidate>
+            {% csrf_token %}
+
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <div class="mt-1" style="font-size:0.75rem;">
+                            {% for e in form.first_name.errors %}{{ e }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <div class="mt-1" style="font-size:0.75rem;">
+                            {% for e in form.last_name.errors %}{{ e }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="mt-1" style="font-size:0.75rem;">
+                        {% for e in form.username.errors %}{{ e }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="mt-1" style="font-size:0.75rem;">
+                        {% for e in form.email.errors %}{{ e }}{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.role.id_for_label }}" class="form-label">Role</label>
+                {{ form.role }}
+                <div class="form-text">Admin accounts are created by the salon manager.</div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label for="{{ form.password1.id_for_label }}" class="form-label">Password</label>
+                    <div class="input-group">
+                        {{ form.password1 }}
+                        <button class="btn" type="button" id="togglePwd1" tabindex="-1">
+                            <i class="bi bi-eye" id="toggleIcon1"></i>
+                        </button>
+                    </div>
+                    {% if form.password1.errors %}
+                        <div class="mt-1" style="font-size:0.75rem;">
+                            {% for e in form.password1.errors %}{{ e }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <label for="{{ form.password2.id_for_label }}" class="form-label">Confirm</label>
+                    <div class="input-group">
+                        {{ form.password2 }}
+                        <button class="btn" type="button" id="togglePwd2" tabindex="-1">
+                            <i class="bi bi-eye" id="toggleIcon2"></i>
+                        </button>
+                    </div>
+                    {% if form.password2.errors %}
+                        <div class="mt-1" style="font-size:0.75rem;">
+                            {% for e in form.password2.errors %}{{ e }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if form.non_field_errors %}
+            <div class="alert mb-3" style="font-size:0.8rem;">
+                {% for e in form.non_field_errors %}<div>{{ e }}</div>{% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-dark">Create Account</button>
+            </div>
+        </form>
+
+        <div class="auth-divider"><span>or</span></div>
+
+        <div class="d-grid">
+            <a href="{% url 'login' %}" class="btn btn-outline-dark">Sign In</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function togglePass(inputId, iconId) {
+        const pwd = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (!pwd) return;
+        if (pwd.type === 'password') {
+            pwd.type = 'text';
+            icon.classList.replace('bi-eye', 'bi-eye-slash');
+        } else {
+            pwd.type = 'password';
+            icon.classList.replace('bi-eye-slash', 'bi-eye');
+        }
+    }
+    document.getElementById('togglePwd1').addEventListener('click', () =>
+        togglePass('{{ form.password1.id_for_label }}', 'toggleIcon1'));
+    document.getElementById('togglePwd2').addEventListener('click', () =>
+        togglePass('{{ form.password2.id_for_label }}', 'toggleIcon2'));
+</script>
+{% endblock %}
