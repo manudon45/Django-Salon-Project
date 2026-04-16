@@ -1,0 +1,27 @@
+{% extends 'glambookapp/base.html' %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mb-4">
+        <h3>Tasks</h3>
+        <p class="text-muted">{% if role == 'staff' %}Tasks for your work day.{% else %}Recommended actions for your account.{% endif %}</p>
+    </div>
+
+    <div class="row gy-3">
+        {% for task in tasks %}
+            <div class="col-md-6">
+                <div class="p-4 border h-100">
+                    <h5>{{ task.title }}</h5>
+                    <p>{{ task.description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="btn btn-outline-dark">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

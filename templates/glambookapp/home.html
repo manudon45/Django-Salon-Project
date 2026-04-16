@@ -1,0 +1,128 @@
+{% extends 'glambookapp/base.html' %}
+
+{% block title %}Dashboard — GlamBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mb-5">
+        <p style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#999; margin-bottom:0.3rem;">
+            {% if role == 'admin' %}Admin{% elif role == 'staff' %}Staff{% else %}Customer{% endif %} Dashboard
+        </p>
+        <h4 class="mb-0" style="font-weight:500;">
+            {{ request.user.first_name|default:request.user.username }}
+        </h4>
+    </div>
+
+    <hr class="mb-5">
+
+    {% if role == 'customer' %}
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-calendar-plus"></i></div>
+                <h6>Book Appointment</h6>
+                <p>Choose a service, pick a staff member, and reserve your slot.</p>
+                <a href="{% url 'book_appointment' %}" class="btn btn-dark btn-sm">Book Now</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-clock-history"></i></div>
+                <h6>My Appointments</h6>
+                <p>Review your upcoming and past appointments.</p>
+                <a href="{% url 'my_appointments' %}" class="btn btn-dark btn-sm">View History</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-bag"></i></div>
+                <h6>Shop Products</h6>
+                <p>Browse our range of hair care and skincare products.</p>
+                <a href="#" class="btn btn-dark btn-sm">Browse</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-receipt"></i></div>
+                <h6>Invoices</h6>
+                <p>Download billing statements for completed services.</p>
+                <a href="#" class="btn btn-dark btn-sm">View Invoices</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-person"></i></div>
+                <h6>My Profile</h6>
+                <p>Update your personal details and preferences.</p>
+                <a href="{% url 'edit_profile' %}" class="btn btn-dark btn-sm">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+
+    {% elif role == 'staff' %}
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-calendar-week"></i></div>
+                <h6>My Schedule</h6>
+                <p>View appointments assigned to you today and upcoming.</p>
+                <a href="{% url 'my_appointments' %}" class="btn btn-dark btn-sm">View Schedule</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-check2-square"></i></div>
+                <h6>Today's Tasks</h6>
+                <p>Check assigned tasks and update their completion status.</p>
+                <a href="{% url 'view_tasks' %}" class="btn btn-dark btn-sm">View Tasks</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-person"></i></div>
+                <h6>My Profile</h6>
+                <p>Update your personal details and specialization info.</p>
+                <a href="{% url 'edit_profile' %}" class="btn btn-dark btn-sm">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+
+    {% elif role == 'admin' %}
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-people"></i></div>
+                <h6>Manage Users</h6>
+                <p>View, edit, or deactivate customer and staff accounts.</p>
+                <a href="/admin/" class="btn btn-dark btn-sm">Go to Admin</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-scissors"></i></div>
+                <h6>Services</h6>
+                <p>Add, update, or remove salon services and pricing.</p>
+                <a href="#" class="btn btn-dark btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-box-seam"></i></div>
+                <h6>Products</h6>
+                <p>Manage the product catalog and stock levels.</p>
+                <a href="#" class="btn btn-dark btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-calendar-check"></i></div>
+                <h6>All Bookings</h6>
+                <p>View and manage every appointment in the system.</p>
+                <a href="{% url 'my_appointments' %}" class="btn btn-dark btn-sm">View Bookings</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
