@@ -1,0 +1,105 @@
+{% extends 'glambookapp/base.html' %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3 class="mb-4">{{ "My Schedule" if is_staff else "My Appointments" }}</h3>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Upcoming Appointments -->
+    <div class="mb-5">
+        <h5 class="text-primary border-bottom pb-2">Upcoming</h5>
+        {% if upcoming %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>{% if is_staff %}Customer{% else %}Provider{% endif %}</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in upcoming %}
+                            <tr>
+                                <td>
+                                    {% if is_staff %}
+                                        {{ appointment.customer.first_name }} {{ appointment.customer.last_name }}
+                                    {% else %}
+                                        {{ appointment.provider.first_name }} {{ appointment.provider.last_name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ appointment.date }}</td>
+                                <td>{{ appointment.time }}</td>
+                                <td>
+                                    <span class="badge bg-warning">{{ appointment.get_status_display }}</span>
+                                </td>
+                                <td>
+                                    {% if not is_staff %}
+                                        <a href="{% url 'reschedule_appointment' appointment.id %}" class="btn btn-sm btn-info">Reschedule</a>
+                                        <a href="{% url 'cancel_appointment' appointment.id %}" class="btn btn-sm btn-danger">Cancel</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">No upcoming appointments.</p>
+        {% endif %}
+    </div>
+
+    <!-- Past Appointments -->
+    <div class="mb-5">
+        <h5 class="text-secondary border-bottom pb-2">Past</h5>
+        {% if past %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>{% if is_staff %}Customer{% else %}Provider{% endif %}</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in past %}
+                            <tr>
+                                <td>
+                                    {% if is_staff %}
+                                        {{ appointment.customer.first_name }} {{ appointment.customer.last_name }}
+                                    {% else %}
+                                        {{ appointment.provider.first_name }} {{ appointment.provider.last_name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ appointment.date }}</td>
+                                <td>{{ appointment.time }}</td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ appointment.get_status_display }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">No past appointments.</p>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'home' %}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}

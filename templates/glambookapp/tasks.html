@@ -1,0 +1,37 @@
+{% extends 'glambookapp/base.html' %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3 class="mb-4">My Tasks</h3>
+
+    {% if user_profile.role == 'staff' %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Staff Tasks</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">✓ Manage your appointments schedule</li>
+                    <li class="list-group-item">✓ View upcoming bookings</li>
+                    <li class="list-group-item">✓ View customer details</li>
+                    <li class="list-group-item">✓ Update your profile information</li>
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Customer Tasks</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">✓ Book appointments with our stylists</li>
+                    <li class="list-group-item">✓ View your appointment history</li>
+                    <li class="list-group-item">✓ Reschedule or cancel appointments</li>
+                    <li class="list-group-item">✓ Update your profile information</li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-4">Back to Dashboard</a>
+</div>
+{% endblock %}
