@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import SignupForm, LoginForm, ProfileForm
+from .forms import SignupForm, LoginForm
 
 
 def signup_view(request):
