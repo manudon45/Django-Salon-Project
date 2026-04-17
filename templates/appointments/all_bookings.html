@@ -1,0 +1,65 @@
+{% extends 'glambookapp/base.html' %}
+
+{% block title %}All Bookings — GlamBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="mb-5">
+        <p style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#999; margin-bottom:0.3rem;">Admin</p>
+        <h4 class="mb-0" style="font-weight:500;">All Bookings</h4>
+    </div>
+
+    <hr class="mb-5">
+
+    {% if appointments %}
+    <div class="table-responsive">
+        <table class="table" style="font-size:0.85rem;">
+            <thead>
+                <tr style="border-bottom: 2px solid #000;">
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">#</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Customer</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Service</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Date</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Time</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Staff</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Status</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="color:#999;">{{ appointment.id }}</td>
+                    <td>{{ appointment.customer.first_name }} {{ appointment.customer.last_name }}</td>
+                    <td style="font-weight:500;">{{ appointment.service.name|default:"—" }}</td>
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.time }}</td>
+                    <td>
+                        {% if appointment.provider %}
+                            {{ appointment.provider.first_name }} {{ appointment.provider.last_name }}
+                        {% else %}
+                            <span style="color:#999; font-size:0.78rem;">Unassigned</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span style="font-size:0.7rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; border:1px solid #000; padding:0.15rem 0.5rem;">{{ appointment.get_status_display }}</span>
+                    </td>
+                    <td>
+                        <a href="{% url 'assign_staff' appointment.id %}" class="btn btn-dark btn-sm">Assign Staff</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No bookings yet.</p>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="btn btn-outline-dark btn-sm">Back to Dashboard</a>
+    </div>
+
+</div>
+{% endblock %}

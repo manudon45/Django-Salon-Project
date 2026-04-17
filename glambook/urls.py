@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('glambookapp.urls')),
     path('appointments/', include('appointments.urls')),
+    path('services/', include('services.urls')),
 ]

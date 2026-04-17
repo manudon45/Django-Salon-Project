@@ -1,105 +1,114 @@
 {% extends 'glambookapp/base.html' %}
 
-{% block title %}My Appointments{% endblock %}
+{% block title %}{% if is_staff %}My Schedule{% else %}My Appointments{% endif %} — GlamBook{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h3 class="mb-4">{{ "My Schedule" if is_staff else "My Appointments" }}</h3>
+<div class="container py-5">
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
-
-    <!-- Upcoming Appointments -->
     <div class="mb-5">
-        <h5 class="text-primary border-bottom pb-2">Upcoming</h5>
+        <p style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#999; margin-bottom:0.3rem;">
+            Appointments
+        </p>
+        <h4 class="mb-0" style="font-weight:500;">{% if is_staff %}My Schedule{% else %}My Appointments{% endif %}</h4>
+    </div>
+
+    <hr class="mb-5">
+
+    <!-- Upcoming -->
+    <div class="mb-5">
+        <p style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:1rem;">Upcoming</p>
         {% if upcoming %}
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>{% if is_staff %}Customer{% else %}Provider{% endif %}</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for appointment in upcoming %}
-                            <tr>
-                                <td>
-                                    {% if is_staff %}
-                                        {{ appointment.customer.first_name }} {{ appointment.customer.last_name }}
-                                    {% else %}
-                                        {{ appointment.provider.first_name }} {{ appointment.provider.last_name }}
-                                    {% endif %}
-                                </td>
-                                <td>{{ appointment.date }}</td>
-                                <td>{{ appointment.time }}</td>
-                                <td>
-                                    <span class="badge bg-warning">{{ appointment.get_status_display }}</span>
-                                </td>
-                                <td>
-                                    {% if not is_staff %}
-                                        <a href="{% url 'reschedule_appointment' appointment.id %}" class="btn btn-sm btn-info">Reschedule</a>
-                                        <a href="{% url 'cancel_appointment' appointment.id %}" class="btn btn-sm btn-danger">Cancel</a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <div class="table-responsive">
+            <table class="table" style="font-size:0.85rem;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #000;">
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Service</th>
+                        {% if is_staff %}
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Customer</th>
+                        {% else %}
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Staff</th>
+                        {% endif %}
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Date</th>
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Time</th>
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Status</th>
+                        {% if not is_staff %}
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in upcoming %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="font-weight:500;">{{ appointment.service.name|default:"—" }}</td>
+                        {% if is_staff %}
+                        <td>{{ appointment.customer.first_name }} {{ appointment.customer.last_name }}</td>
+                        {% else %}
+                        <td>{% if appointment.provider %}{{ appointment.provider.first_name }} {{ appointment.provider.last_name }}{% else %}<span style="color:#999;">To be assigned</span>{% endif %}</td>
+                        {% endif %}
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                        <td>
+                            <span style="font-size:0.7rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; border:1px solid #000; padding:0.15rem 0.5rem;">{{ appointment.get_status_display }}</span>
+                        </td>
+                        {% if not is_staff %}
+                        <td>
+                            <a href="{% url 'reschedule_appointment' appointment.id %}" class="btn btn-outline-dark btn-sm me-1">Reschedule</a>
+                            <a href="{% url 'cancel_appointment' appointment.id %}" class="btn btn-dark btn-sm">Cancel</a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
-            <p class="text-muted">No upcoming appointments.</p>
+        <p class="text-muted">No upcoming appointments.</p>
         {% endif %}
     </div>
 
-    <!-- Past Appointments -->
+    <!-- Past -->
     <div class="mb-5">
-        <h5 class="text-secondary border-bottom pb-2">Past</h5>
+        <p style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:1rem;">Past</p>
         {% if past %}
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>{% if is_staff %}Customer{% else %}Provider{% endif %}</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for appointment in past %}
-                            <tr>
-                                <td>
-                                    {% if is_staff %}
-                                        {{ appointment.customer.first_name }} {{ appointment.customer.last_name }}
-                                    {% else %}
-                                        {{ appointment.provider.first_name }} {{ appointment.provider.last_name }}
-                                    {% endif %}
-                                </td>
-                                <td>{{ appointment.date }}</td>
-                                <td>{{ appointment.time }}</td>
-                                <td>
-                                    <span class="badge bg-secondary">{{ appointment.get_status_display }}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <div class="table-responsive">
+            <table class="table" style="font-size:0.85rem;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #000;">
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Service</th>
+                        {% if is_staff %}
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Customer</th>
+                        {% else %}
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Staff</th>
+                        {% endif %}
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Date</th>
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Time</th>
+                        <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in past %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="font-weight:500;">{{ appointment.service.name|default:"—" }}</td>
+                        {% if is_staff %}
+                        <td>{{ appointment.customer.first_name }} {{ appointment.customer.last_name }}</td>
+                        {% else %}
+                        <td>{% if appointment.provider %}{{ appointment.provider.first_name }} {{ appointment.provider.last_name }}{% else %}<span style="color:#999;">—</span>{% endif %}</td>
+                        {% endif %}
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                        <td>
+                            <span style="font-size:0.7rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; border:1px solid #ccc; color:#999; padding:0.15rem 0.5rem;">{{ appointment.get_status_display }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
-            <p class="text-muted">No past appointments.</p>
+        <p class="text-muted">No past appointments.</p>
         {% endif %}
     </div>
 
-    <a href="{% url 'home' %}" class="btn btn-secondary">Back to Dashboard</a>
+    <a href="{% url 'home' %}" class="btn btn-outline-dark btn-sm">Back to Dashboard</a>
 </div>
 {% endblock %}

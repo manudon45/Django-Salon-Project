@@ -1,0 +1,40 @@
+{% extends 'glambookapp/base.html' %}
+
+{% block title %}Cancel Appointment — GlamBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="mb-5">
+        <p style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#999; margin-bottom:0.3rem;">Customer</p>
+        <h4 class="mb-0" style="font-weight:500;">Cancel Appointment</h4>
+    </div>
+
+    <hr class="mb-5">
+
+    <div style="max-width:480px;">
+
+        <div class="mb-4" style="border:1px solid #000; padding:1.2rem;">
+            <p style="font-size:0.72rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:0.8rem;">Booking Details</p>
+            <div style="font-size:0.85rem; display:grid; gap:0.4rem;">
+                <div><span style="color:#999;">Service:</span> {{ appointment.service.name|default:"—" }}</div>
+                <div><span style="color:#999;">Date:</span> {{ appointment.date }}</div>
+                <div><span style="color:#999;">Time:</span> {{ appointment.time }}</div>
+                <div><span style="color:#999;">Status:</span> {{ appointment.get_status_display }}</div>
+            </div>
+        </div>
+
+        <p style="font-size:0.85rem;">Are you sure you want to cancel this appointment? This action cannot be undone.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-dark">Yes, Cancel Appointment</button>
+                <a href="{% url 'my_appointments' %}" class="btn btn-outline-dark">Go Back</a>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}

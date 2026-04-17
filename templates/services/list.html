@@ -1,0 +1,63 @@
+{% extends 'glambookapp/base.html' %}
+
+{% block title %}Services — GlamBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="d-flex align-items-start justify-content-between mb-5">
+        <div>
+            <p style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#999; margin-bottom:0.3rem;">Admin</p>
+            <h4 class="mb-0" style="font-weight:500;">Services</h4>
+        </div>
+        <a href="{% url 'service_create' %}" class="btn btn-dark btn-sm">+ Add Service</a>
+    </div>
+
+    <hr class="mb-5">
+
+    {% if services %}
+    <div class="table-responsive">
+        <table class="table" style="font-size:0.85rem;">
+            <thead>
+                <tr style="border-bottom: 2px solid #000;">
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Name</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Description</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Duration</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Price</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Status</th>
+                    <th style="font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; font-weight:600;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="font-weight:500;">{{ service.name }}</td>
+                    <td style="color:#555;">{{ service.description|truncatechars:60 }}</td>
+                    <td>{{ service.duration_minutes }} min</td>
+                    <td>${{ service.price }}</td>
+                    <td>
+                        {% if service.is_active %}
+                        <span style="font-size:0.7rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; border:1px solid #000; padding:0.15rem 0.5rem;">Active</span>
+                        {% else %}
+                        <span style="font-size:0.7rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; border:1px solid #ccc; color:#999; padding:0.15rem 0.5rem;">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'service_edit' service.pk %}" class="btn btn-outline-dark btn-sm me-1">Edit</a>
+                        <a href="{% url 'service_delete' service.pk %}" class="btn btn-dark btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No services yet. <a href="{% url 'service_create' %}">Add one.</a></p>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="btn btn-outline-dark btn-sm">Back to Dashboard</a>
+    </div>
+
+</div>
+{% endblock %}

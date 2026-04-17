@@ -1,0 +1,26 @@
+{% extends 'glambookapp/base.html' %}
+
+{% block title %}Delete Service — GlamBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="mb-5">
+        <p style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#999; margin-bottom:0.3rem;">Admin / Services</p>
+        <h4 class="mb-0" style="font-weight:500;">Delete Service</h4>
+    </div>
+
+    <hr class="mb-5">
+
+    <div style="max-width:480px;">
+        <p>Are you sure you want to delete <strong>{{ service.name }}</strong>? This cannot be undone.</p>
+
+        <form method="post" class="d-flex gap-2 mt-4">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-dark">Delete</button>
+            <a href="{% url 'service_list' %}" class="btn btn-outline-dark">Cancel</a>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

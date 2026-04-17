@@ -4,12 +4,9 @@
 
 {% block content %}
 <div class="container py-5">
-    <div class="mb-5">
-        <p style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#999; margin-bottom:0.3rem;">
 
     <div class="mb-5">
-        <p
-            style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#999; margin-bottom:0.3rem;">
+        <p style="font-size:0.72rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#999; margin-bottom:0.3rem;">
             {% if role == 'admin' %}Admin{% elif role == 'staff' %}Staff{% else %}Customer{% endif %} Dashboard
         </p>
         <h4 class="mb-0" style="font-weight:500;">
@@ -28,7 +25,6 @@
                 <h6>Book Appointment</h6>
                 <p>Choose a service, pick a staff member, and reserve your slot.</p>
                 <a href="{% url 'book_appointment' %}" class="btn btn-dark btn-sm">Book Now</a>
-                <a href="#" class="btn btn-dark btn-sm">Book Now</a>
             </div>
         </div>
         <div class="col-md-4">
@@ -37,7 +33,6 @@
                 <h6>My Appointments</h6>
                 <p>Review your upcoming and past appointments.</p>
                 <a href="{% url 'my_appointments' %}" class="btn btn-dark btn-sm">View History</a>
-                <a href="#" class="btn btn-dark btn-sm">View History</a>
             </div>
         </div>
         <div class="col-md-4">
@@ -62,7 +57,6 @@
                 <h6>My Profile</h6>
                 <p>Update your personal details and preferences.</p>
                 <a href="{% url 'edit_profile' %}" class="btn btn-dark btn-sm">Edit Profile</a>
-                <a href="#" class="btn btn-dark btn-sm">Edit Profile</a>
             </div>
         </div>
     </div>
@@ -76,16 +70,6 @@
                 <h6>My Schedule</h6>
                 <p>View appointments assigned to you today and upcoming.</p>
                 <a href="{% url 'my_appointments' %}" class="btn btn-dark btn-sm">View Schedule</a>
-                <a href="#" class="btn btn-dark btn-sm">View Schedule</a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="dash-card">
-                <div class="dash-icon"><i class="bi bi-check2-square"></i></div>
-                <h6>Today's Tasks</h6>
-                <p>Check assigned tasks and update their completion status.</p>
-                <a href="{% url 'view_tasks' %}" class="btn btn-dark btn-sm">View Tasks</a>
-                <a href="#" class="btn btn-dark btn-sm">View Tasks</a>
             </div>
         </div>
         <div class="col-md-4">
@@ -94,7 +78,6 @@
                 <h6>My Profile</h6>
                 <p>Update your personal details and specialization info.</p>
                 <a href="{% url 'edit_profile' %}" class="btn btn-dark btn-sm">Edit Profile</a>
-                <a href="#" class="btn btn-dark btn-sm">Edit Profile</a>
             </div>
         </div>
     </div>
@@ -115,7 +98,7 @@
                 <div class="dash-icon"><i class="bi bi-scissors"></i></div>
                 <h6>Services</h6>
                 <p>Add, update, or remove salon services and pricing.</p>
-                <a href="#" class="btn btn-dark btn-sm">Manage</a>
+                <a href="{% url 'service_list' %}" class="btn btn-dark btn-sm">Manage</a>
             </div>
         </div>
         <div class="col-md-4">
@@ -131,8 +114,7 @@
                 <div class="dash-icon"><i class="bi bi-calendar-check"></i></div>
                 <h6>All Bookings</h6>
                 <p>View and manage every appointment in the system.</p>
-                <a href="{% url 'my_appointments' %}" class="btn btn-dark btn-sm">View Bookings</a>
-                <a href="#" class="btn btn-dark btn-sm">View Bookings</a>
+                <a href="{% url 'all_bookings' %}" class="btn btn-dark btn-sm">View Bookings</a>
             </div>
         </div>
         <div class="col-md-4">
