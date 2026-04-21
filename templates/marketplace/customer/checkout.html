@@ -1,0 +1,83 @@
+{% extends "glambookapp/base.html" %}
+
+{% block title %}Checkout - Marketplace{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2>Checkout</h2>
+            <hr>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Review</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="mb-3">Items:</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items.all %}
+                                <tr>
+                                    <td>{{ item.product.name }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>${{ item.price_at_purchase }}</td>
+                                    <td><strong>${{ item.get_total_price }}</strong></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Total Items:</strong></p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <p>{{ order.items.count }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><strong>Total Amount:</strong></h5>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <h4 class="text-success"><strong>${{ order.total_amount }}</strong></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info" role="alert">
+                <i class="bi bi-info-circle"></i> 
+                <strong>Note:</strong> By confirming this order, an invoice will be automatically generated for your records.
+            </div>
+
+            <form method="post" class="d-flex gap-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-lg" onclick="return confirm('Are you sure you want to confirm this order?')">
+                    <i class="bi bi-check-circle"></i> Confirm Order
+                </button>
+                <a href="{% url 'marketplace:view_cart' %}" class="btn btn-secondary btn-lg">Back to Cart</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

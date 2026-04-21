@@ -1,0 +1,30 @@
+{% extends "glambookapp/base.html" %}
+
+{% block title %}Delete Product - Marketplace{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> <strong>Delete Product</strong>
+            </div>
+
+            <p>Are you sure you want to delete the product <strong>{{ product.name }}</strong>?</p>
+            <p class="text-muted">Price: <strong>${{ product.price }}</strong> | Stock: <strong>{{ product.quantity_in_stock }}</strong></p>
+
+            <div class="alert alert-warning">
+                <small><i class="bi bi-info-circle"></i> This action cannot be undone.</small>
+            </div>
+
+            <form method="post" class="d-flex gap-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Yes, Delete
+                </button>
+                <a href="{% url 'marketplace:product_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

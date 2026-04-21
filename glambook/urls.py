@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('glambookapp.urls')),
     path('appointments/', include('appointments.urls')),
     path('services/', include('services.urls')),
+    path('marketplace/', include('marketplace.urls')),
 ]

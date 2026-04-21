@@ -1,0 +1,57 @@
+{% extends "glambookapp/base.html" %}
+
+{% block title %}Add to Cart - Marketplace{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2>Add to Cart</h2>
+            <hr>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-muted">
+                        {% if product.description %}
+                        {{ product.description }}
+                        {% else %}
+                        No description available
+                        {% endif %}
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Price:</strong> <span class="text-success fs-5">${{ product.price }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Available Stock:</strong> <span class="badge bg-success">{{ product.quantity_in_stock }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label for="id_quantity" class="form-label"><strong>Quantity *</strong></label>
+                    {{ form.quantity }}
+                    {% if form.quantity.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.quantity.errors|join:", " }}
+                    </div>
+                    {% endif %}
+                    <small class="form-text text-muted">Maximum available: {{ product.quantity_in_stock }}</small>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-cart-plus"></i> Add to Cart
+                    </button>
+                    <a href="{% url 'marketplace:shop' %}" class="btn btn-secondary btn-lg">Continue Shopping</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

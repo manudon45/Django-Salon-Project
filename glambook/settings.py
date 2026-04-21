@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'glambookapp',
     'appointments',
     'services',
+    'marketplace',
 ]
 
 MIDDLEWARE = [
