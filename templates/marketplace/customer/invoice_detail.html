@@ -1,0 +1,177 @@
+{% extends "glambookapp/base.html" %}
+
+{% block title %}Invoice {{ invoice.invoice_number }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col text-end">
+            <button onclick="window.print()" class="btn btn-primary btn-sm">
+                <i class="bi bi-printer"></i> Print Invoice
+            </button>
+            <a href="{% url 'marketplace:my_invoices' %}" class="btn btn-secondary btn-sm">Back to Invoices</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Invoice Header -->
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <h3 class="text-primary mb-0">INVOICE</h3>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <h6 class="text-muted">Invoice #{{ invoice.invoice_number }}</h6>
+                        </div>
+                    </div>
+
+                    <!-- Bill To Section -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="mb-3"><strong>BILL TO:</strong></h6>
+                            <p>
+                                <strong>{{ invoice.order.customer.first_name }} {{ invoice.order.customer.last_name }}</strong><br>
+                                Email: {{ invoice.order.customer.email }}<br>
+                                {% if invoice.order.customer.profile %}
+                                Role: {{ invoice.order.customer.profile.get_role_display }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <p>
+                                <strong>Invoice Date:</strong> {{ invoice.issued_date|date:"M d, Y" }}<br>
+                                <strong>Status:</strong> 
+                                {% if invoice.status == 'draft' %}
+                                <span class="badge bg-secondary">Draft</span>
+                                {% elif invoice.status == 'issued' %}
+                                <span class="badge bg-info">Issued</span>
+                                {% elif invoice.status == 'paid' %}
+                                <span class="badge bg-success">Paid</span>
+                                {% elif invoice.status == 'overdue' %}
+                                <span class="badge bg-danger">Overdue</span>
+                                {% endif %}
+                                <br>
+                                {% if invoice.due_date %}
+                                <strong>Due Date:</strong> {{ invoice.due_date|date:"M d, Y" }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Items Section -->
+                    <h6 class="mb-3"><strong>ORDER DETAILS</strong></h6>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr class="border-bottom">
+                                    <th>Order ID</th>
+                                    <th>Order Date</th>
+                                    <th>Order Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>#{{ invoice.order.id }}</strong></td>
+                                    <td>{{ invoice.order.created_at|date:"M d, Y H:i" }}</td>
+                                    <td>
+                                        {% if invoice.order.status == 'pending' %}
+                                        <span class="badge bg-warning">Pending</span>
+                                        {% elif invoice.order.status == 'confirmed' %}
+                                        <span class="badge bg-info">Confirmed</span>
+                                        {% elif invoice.order.status == 'shipped' %}
+                                        <span class="badge bg-primary">Shipped</span>
+                                        {% elif invoice.order.status == 'delivered' %}
+                                        <span class="badge bg-success">Delivered</span>
+                                        {% elif invoice.order.status == 'cancelled' %}
+                                        <span class="badge bg-danger">Cancelled</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h6 class="mb-3"><strong>LINE ITEMS</strong></h6>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr class="border-bottom">
+                                    <th>Description</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-right">Unit Price</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in invoice.order.items.all %}
+                                <tr>
+                                    <td>{{ item.product.name }}</td>
+                                    <td class="text-center">{{ item.quantity }}</td>
+                                    <td class="text-right">${{ item.price_at_purchase }}</td>
+                                    <td class="text-right"><strong>${{ item.get_total_price }}</strong></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <!-- Summary Section -->
+                    <div class="row mb-4">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <div class="row mb-2">
+                                <div class="col-8 text-end">
+                                    <strong>Subtotal:</strong>
+                                </div>
+                                <div class="col-4 text-end">
+                                    ${{ invoice.amount_due }}
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-8 text-end">
+                                    <strong>Tax:</strong>
+                                </div>
+                                <div class="col-4 text-end">
+                                    $0.00
+                                </div>
+                            </div>
+                            <div class="row border-top pt-2">
+                                <div class="col-8 text-end">
+                                    <h5><strong>TOTAL DUE:</strong></h5>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <h5 class="text-success"><strong>${{ invoice.amount_due }}</strong></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Footer -->
+                    <div class="row mt-5">
+                        <div class="col text-center text-muted">
+                            <small>
+                                <p>Thank you for your business!</p>
+                                <p>This invoice was created on {{ invoice.issued_date|date:"M d, Y" }}</p>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style media="print">
+    .btn { display: none; }
+    body { background: white; }
+    .card { border: none; box-shadow: none; }
+</style>
+{% endblock %}

@@ -40,7 +40,7 @@
                 <div class="dash-icon"><i class="bi bi-bag"></i></div>
                 <h6>Shop Products</h6>
                 <p>Browse our range of hair care and skincare products.</p>
-                <a href="#" class="btn btn-dark btn-sm">Browse</a>
+                <a href="{% url 'marketplace:shop' %}" class="btn btn-dark btn-sm">Browse</a>
             </div>
         </div>
         <div class="col-md-4">
@@ -48,7 +48,7 @@
                 <div class="dash-icon"><i class="bi bi-receipt"></i></div>
                 <h6>Invoices</h6>
                 <p>Download billing statements for completed services.</p>
-                <a href="#" class="btn btn-dark btn-sm">View Invoices</a>
+                <a href="{% url 'marketplace:my_invoices' %}" class="btn btn-dark btn-sm">View Invoices</a>
             </div>
         </div>
         <div class="col-md-4">
@@ -106,7 +106,7 @@
                 <div class="dash-icon"><i class="bi bi-box-seam"></i></div>
                 <h6>Products</h6>
                 <p>Manage the product catalog and stock levels.</p>
-                <a href="#" class="btn btn-dark btn-sm">Manage</a>
+                <a href="{% url 'marketplace:product_list' %}" class="btn btn-dark btn-sm">Manage</a>
             </div>
         </div>
         <div class="col-md-4">
@@ -119,10 +119,18 @@
         </div>
         <div class="col-md-4">
             <div class="dash-card">
+                <div class="dash-icon"><i class="bi bi-bag-check"></i></div>
+                <h6>All Orders</h6>
+                <p>View and update the status of all marketplace orders.</p>
+                <a href="{% url 'marketplace:all_orders' %}" class="btn btn-dark btn-sm">View Orders</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-card">
                 <div class="dash-icon"><i class="bi bi-receipt-cutoff"></i></div>
                 <h6>Invoices</h6>
                 <p>Review all billing records and payment statuses.</p>
-                <a href="#" class="btn btn-dark btn-sm">View Invoices</a>
+                <a href="{% url 'marketplace:all_invoices' %}" class="btn btn-dark btn-sm">View Invoices</a>
             </div>
         </div>
     </div>

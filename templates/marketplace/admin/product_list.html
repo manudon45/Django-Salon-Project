@@ -1,0 +1,67 @@
+{% extends "glambookapp/base.html" %}
+
+{% block title %}Products - Marketplace Admin{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Manage Products</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'marketplace:product_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Add Product
+            </a>
+        </div>
+    </div>
+
+    {% if products %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>
+                        <strong>{{ product.name }}</strong>
+                        {% if product.description %}
+                        <br><small class="text-muted">{{ product.description|truncatewords:10 }}</small>
+                        {% endif %}
+                    </td>
+                    <td>${{ product.price }}</td>
+                    <td>
+                        <span class="badge {% if product.quantity_in_stock > 5 %}bg-success{% elif product.quantity_in_stock > 0 %}bg-warning{% else %}bg-danger{% endif %}">
+                            {{ product.quantity_in_stock }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if product.is_active %}
+                        <span class="badge bg-success">Active</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'marketplace:product_edit' product.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'marketplace:product_delete' product.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        <i class="bi bi-info-circle"></i> No products yet. <a href="{% url 'marketplace:product_create' %}">Create one now!</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

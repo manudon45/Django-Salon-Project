@@ -1,0 +1,69 @@
+{% extends "glambookapp/base.html" %}
+
+{% block title %}Shop - Marketplace{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Marketplace Shop</h2>
+            <p class="text-muted">Browse and purchase our available products</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'marketplace:view_cart' %}" class="btn btn-primary btn-sm">
+                <i class="bi bi-cart"></i> View Cart
+            </a>
+            <a href="{% url 'marketplace:my_orders' %}" class="btn btn-info btn-sm">
+                <i class="bi bi-bag-check"></i> My Orders
+            </a>
+            <a href="{% url 'marketplace:my_invoices' %}" class="btn btn-secondary btn-sm">
+                <i class="bi bi-receipt"></i> Invoices
+            </a>
+        </div>
+    </div>
+
+    {% if products %}
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    
+                    {% if product.description %}
+                    <p class="card-text text-muted">
+                        {{ product.description|truncatewords:15 }}
+                    </p>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-primary mb-0">${{ product.price }}</h4>
+                        <span class="badge {% if product.quantity_in_stock > 0 %}bg-success{% else %}bg-danger{% endif %}">
+                            {% if product.quantity_in_stock > 0 %}
+                            {{ product.quantity_in_stock }} in stock
+                            {% else %}
+                            Out of stock
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    {% if product.quantity_in_stock > 0 %}
+                    <a href="{% url 'marketplace:add_to_cart' product.id %}" class="btn btn-primary btn-sm w-100">
+                        <i class="bi bi-cart-plus"></i> Add to Cart
+                    </a>
+                    {% else %}
+                    <button class="btn btn-secondary btn-sm w-100 disabled">Out of Stock</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        <i class="bi bi-info-circle"></i> No products available at the moment.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

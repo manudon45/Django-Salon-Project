@@ -1,0 +1,91 @@
+{% extends "glambookapp/base.html" %}
+
+{% block title %}{{ title }} - Marketplace{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2>{{ title }}</h2>
+            <hr>
+
+            <form method="post" class="needs-validation">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="id_name" class="form-label">Product Name *</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.name.errors|join:", " }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">Description</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.description.errors|join:", " }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="id_price" class="form-label">Price ($) *</label>
+                        {{ form.price }}
+                        {% if form.price.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.price.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="id_quantity_in_stock" class="form-label">{{ form.quantity_in_stock.label }} *</label>
+                        {{ form.quantity_in_stock }}
+                        {% if form.quantity_in_stock.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.quantity_in_stock.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-3 form-check">
+                    {{ form.is_active }}
+                    <label for="id_is_active" class="form-check-label">
+                        {{ form.is_active.label }}
+                    </label>
+                    {% if form.is_active.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.is_active.errors|join:", " }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        {% if action == 'Add' %}
+                        <i class="bi bi-plus-circle"></i> Create Product
+                        {% else %}
+                        <i class="bi bi-pencil"></i> Update Product
+                        {% endif %}
+                    </button>
+                    <a href="{% url 'marketplace:product_list' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
