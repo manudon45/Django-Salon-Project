@@ -5,6 +5,7 @@ from .models import Product, Order, OrderItem, Invoice
 from .forms import ProductForm, AddToCartForm
 
 ## just testing if my name is coming or not asdasd
+#Not changing
 def admin_required(view_func):
     """Decorator to check if user is admin"""
     def wrapper(request, *args, **kwargs):
