@@ -6,6 +6,7 @@ from .forms import ProductForm, AddToCartForm
 
 ## just testing if my name is coming or not asdasd
 #Not changing
+# why my name not showing
 def admin_required(view_func):
     """Decorator to check if user is admin"""
     def wrapper(request, *args, **kwargs):
